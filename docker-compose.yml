@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db-cnt2:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test
+    ports:
+      - 3308:3306
+    volumes:
+      - ./db2:/var/lib/mysql
+  my-app-cnt2:
+    image: my-app
+    ports:
+      - 8082:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-cnt2:3306/test?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false&maxReconnects=1500
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      - db-cnt2
